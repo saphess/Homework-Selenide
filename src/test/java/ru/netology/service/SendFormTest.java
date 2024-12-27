@@ -1,6 +1,7 @@
 package ru.netology.service;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.BeforeAll;
@@ -18,6 +19,12 @@ import static com.codeborne.selenide.Selenide.$$;
 public class SendFormTest {
     public String generateDate(int days, String pattern) {
         return LocalDate.now().plusDays(days).format(DateTimeFormatter.ofPattern(pattern));
+    }
+
+    @BeforeAll
+    static void setUp() {
+        Configuration.headless = true;
+        Configuration.browser = "chrome";
     }
 
     @BeforeEach
@@ -39,7 +46,8 @@ public class SendFormTest {
 
         $$("button").findBy(Condition.text("Забронировать")).click();
 
-        $("[data-test-id='notification']").should(Condition.visible, Duration.ofSeconds(15));
+        $("[data-test-id='notification']").shouldBe(Condition.visible, Duration.ofSeconds(15))
+                .shouldHave(Condition.text(date));
     }
 
     @Test
@@ -48,7 +56,7 @@ public class SendFormTest {
         String date = generateDate(days, "dd.MM.yyyy");
 
         $("[data-test-id='city'] .input__control").setValue("Ту");
-        $(Selectors.byText("Тула")).click();
+        $(".menu").$(Selectors.byText("Тула")).click();
 
         $("[data-test-id='date'] .input__control").click();
         String day = String.valueOf(LocalDate.now().plusDays(days).getDayOfMonth());
@@ -65,6 +73,7 @@ public class SendFormTest {
 
         $$("button").findBy(Condition.text("Забронировать")).click();
 
-        $("[data-test-id='notification']").should(Condition.visible, Duration.ofSeconds(15));
+        $("[data-test-id='notification']").shouldBe(Condition.visible, Duration.ofSeconds(15))
+                .shouldHave(Condition.text(date));
     }
 }
