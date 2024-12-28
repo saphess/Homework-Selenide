@@ -23,7 +23,6 @@ public class SendFormTest {
 
     @BeforeAll
     static void setUp() {
-        Configuration.headless = true;
         Configuration.browser = "chrome";
     }
 
