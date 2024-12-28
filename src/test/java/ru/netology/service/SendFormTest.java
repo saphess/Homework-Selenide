@@ -47,7 +47,8 @@ public class SendFormTest {
         $$("button").findBy(Condition.text("Забронировать")).click();
 
         $("[data-test-id='notification']").shouldBe(Condition.visible, Duration.ofSeconds(15))
-                .shouldHave(Condition.text(date));
+                .shouldHave(Condition.text("Встреча успешно забронирована на " + date),
+                        Condition.text("Успешно!"));
     }
 
     @Test
@@ -62,10 +63,8 @@ public class SendFormTest {
         String day = String.valueOf(LocalDate.now().plusDays(days).getDayOfMonth());
         if (LocalDate.now().plusDays(days).getMonth() != LocalDate.now().getMonth()) {
             $("[data-step='1']").click();
-            $$(".calendar__day").findBy(Condition.text(day)).click();
-        } else {
-            $$(".calendar__day").findBy(Condition.text(day)).click();
         }
+        $$(".calendar__day").findBy(Condition.text(day)).click();
 
         $("[data-test-id='name'] .input__control").setValue("Ольга Петросян");
         $("[data-test-id='phone'] .input__control").setValue("+79505005050");
@@ -74,6 +73,7 @@ public class SendFormTest {
         $$("button").findBy(Condition.text("Забронировать")).click();
 
         $("[data-test-id='notification']").shouldBe(Condition.visible, Duration.ofSeconds(15))
-                .shouldHave(Condition.text(date));
+                .shouldHave(Condition.text("Встреча успешно забронирована на " + date),
+                        Condition.text("Успешно!"));
     }
 }
